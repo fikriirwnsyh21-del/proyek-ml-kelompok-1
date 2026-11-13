@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Screening Awal Risiko Diabetes | Tugas Besar ML</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Screening Awal Risiko Diabetes</h1>
+      <p class="subtitle">Prototipe Aplikasi Web Machine Learning (BRFSS 2015 Health Indicators)</p>
+    </header>
+
+    <section class="card">
+      <h2>Input Indikator Kesehatan</h2>
+      <form id="predictForm" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="BMI">BMI (Body Mass Index: 10 - 100)</label>
+            <input type="number" id="BMI" name="BMI" step="0.1" min="10" max="100" value="27" required />
+          </div>
+
+          <div class="form-group">
+            <label for="GenHlth">Kesehatan Umum (1=Sangat Baik, 5=Buruk)</label>
+            <select id="GenHlth" name="GenHlth" required>
+              <option value="1">1 - Sangat Baik</option>
+              <option value="2" selected>2 - Baik</option>
+              <option value="3">3 - Cukup</option>
+              <option value="4">4 - Kurang</option>
+              <option value="5">5 - Buruk</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="MentHlth">Hari Kesehatan Mental Buruk (0 - 30)</label>
+            <input type="number" id="MentHlth" name="MentHlth" min="0" max="30" value="0" required />
+          </div>
+
+          <div class="form-group">
+            <label for="PhysHlth">Hari Kesehatan Fisik Buruk (0 - 30)</label>
+            <input type="number" id="PhysHlth" name="PhysHlth" min="0" max="30" value="0" required />
+          </div>
+
+          <div class="form-group">
+            <label for="Age">Kategori Usia (1=18-24 ... 13=80+)</label>
+            <select id="Age" name="Age" required>
+              <option value="1">1 (18-24 tahun)</option>
+              <option value="2">2 (25-29 tahun)</option>
+              <option value="3">3 (30-34 tahun)</option>
+              <option value="4">4 (35-39 tahun)</option>
+              <option value="5">5 (40-44 tahun)</option>
+              <option value="6">6 (45-49 tahun)</option>
+              <option value="7">7 (50-54 tahun)</option>
+              <option value="8" selected>8 (55-59 tahun)</option>
+              <option value="9">9 (60-64 tahun)</option>
+              <option value="10">10 (65-69 tahun)</option>
+              <option value="11">11 (70-74 tahun)</option>
+              <option value="12">12 (75-79 tahun)</option>
+              <option value="13">13 (80+ tahun)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Education">Tingkat Pendidikan (1 - 6)</label>
+            <select id="Education" name="Education" required>
+              <option value="1">1 - Tidak sekolah / TK</option>
+              <option value="2">2 - SD</option>
+              <option value="3">3 - SMP</option>
+              <option value="4" selected>4 - SMA / Sederajat</option>
+              <option value="5">5 - Diploma / Kuliah</option>
+              <option value="6">6 - Sarjana / Pascasarjana</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Income">Tingkat Pendapatan (1 - 8)</label>
+            <select id="Income" name="Income" required>
+              <option value="1">1 (&lt; Rp 150 Juta / tahun)</option>
+              <option value="2">2 (Rp 150 - 225 Juta / tahun)</option>
+              <option value="3">3 (Rp 225 - 300 Juta / tahun)</option>
+              <option value="4">4 (Rp 300 - 375 Juta / tahun)</option>
+              <option value="5" selected>5 (Rp 375 - 525 Juta / tahun)</option>
+              <option value="6">6 (Rp 525 - 750 Juta / tahun)</option>
+              <option value="7">7 (Rp 750 Juta - 1,1 Miliar / tahun)</option>
+              <option value="8">8 (&gt;= Rp 1,1 Miliar / tahun)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Sex">Jenis Kelamin</label>
+            <select id="Sex" name="Sex" required>
+              <option value="0" selected>0 - Perempuan</option>
+              <option value="1">1 - Laki-laki</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="HighBP">Tekanan Darah Tinggi (HighBP)</label>
+            <select id="HighBP" name="HighBP" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="HighChol">Kolesterol Tinggi (HighChol)</label>
+            <select id="HighChol" name="HighChol" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="CholCheck">Cek Kolesterol 5 Tahun Terakhir</label>
+            <select id="CholCheck" name="CholCheck" required>
+              <option value="0">0 - Tidak</option>
+              <option value="1" selected>1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Smoker">Perokok (&ge; 100 batang seumur hidup)</label>
+            <select id="Smoker" name="Smoker" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Stroke">Riwayat Stroke</label>
+            <select id="Stroke" name="Stroke" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="HeartDiseaseorAttack">Penyakit / Serangan Jantung</label>
+            <select id="HeartDiseaseorAttack" name="HeartDiseaseorAttack" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="PhysActivity">Aktivitas Fisik (30 hari terakhir)</label>
+            <select id="PhysActivity" name="PhysActivity" required>
+              <option value="0">0 - Tidak</option>
+              <option value="1" selected>1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Fruits">Konsumsi Buah (&ge; 1x/hari)</label>
+            <select id="Fruits" name="Fruits" required>
+              <option value="0">0 - Tidak</option>
+              <option value="1" selected>1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="Veggies">Konsumsi Sayur (&ge; 1x/hari)</label>
+            <select id="Veggies" name="Veggies" required>
+              <option value="0">0 - Tidak</option>
+              <option value="1" selected>1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="HvyAlcoholConsump">Konsumsi Alkohol Berat</label>
+            <select id="HvyAlcoholConsump" name="HvyAlcoholConsump" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="AnyHealthcare">Memiliki Jaminan Kesehatan</label>
+            <select id="AnyHealthcare" name="AnyHealthcare" required>
+              <option value="0">0 - Tidak</option>
+              <option value="1" selected>1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="NoDocbcCost">Kendala Biaya ke Dokter</label>
+            <select id="NoDocbcCost" name="NoDocbcCost" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="DiffWalk">Kesulitan Berjalan / Naik Tangga</label>
+            <select id="DiffWalk" name="DiffWalk" required>
+              <option value="0" selected>0 - Tidak</option>
+              <option value="1">1 - Ya</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="submitBtn">Prediksi Risiko</button>
+          <button type="reset" class="btn-secondary">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="resultSection" class="card hidden" aria-live="polite">
+      <h2>Hasil Screening Model</h2>
+      <div id="resultContent"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
